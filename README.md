@@ -69,9 +69,9 @@ To patch with Twitter/X version 11.88 to 12.4, you must include patches from ano
 ## ⚙️ Patch Details
 
 <!-- PATCHES_START -->
-> **[v3.9.0](https://github.com/crimera/piko/releases/tag/v3.9.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;133 patches total
+> **[v1.0.0](https://github.com/totto357/piko/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;134 patches total
 <details>
-<summary>📦 Twitter&nbsp;&nbsp;•&nbsp;&nbsp;74 patches</summary>
+<summary>📦 Twitter&nbsp;&nbsp;•&nbsp;&nbsp;75 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -155,6 +155,7 @@ To patch with Twitter/X version 11.88 to 12.4, you must include patches from ano
 | [Show post source label](#show-post-source-label) | Source label will be shown only on public posts |  |
 | [Show sensitive media](#show-sensitive-media) |  |  |
 | [Support external downloader](#support-external-downloader) |  |  |
+| [Timeline mute filter](#timeline-mute-filter) | Hide posts matching custom muted words or users across all timelines including lists and search. |  |
 
 </details>
 
