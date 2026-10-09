@@ -1,3 +1,9 @@
+## [3.11.1](https://github.com/totto357/piko/compare/v3.11.0...v3.11.1) (2026-10-09)
+
+### 🐛 Bug Fixes
+
+* **twitter:** invoke mute filter at start of setTweet and improve root view resolution ([9e15997](https://github.com/totto357/piko/commit/9e159979e1a5177a1f34704505fa788c19224c05))
+
 ## [3.11.0](https://github.com/totto357/piko/compare/v3.10.1...v3.11.0) (2026-10-09)
 
 ### ✨ New Features

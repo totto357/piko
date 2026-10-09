@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-09T11:38:10",
-  "description": "## [3.11.0](https://github.com/totto357/piko/compare/v3.10.1...v3.11.0) (2026-10-09)\n\n### ✨ New Features\n\n* **twitter:** add option to mute reposts from muted users ([9c43dc7](https://github.com/totto357/piko/commit/9c43dc7e3a21be2e56300a2243cb82fffe020108))",
-  "download_url": "https://github.com/totto357/piko/releases/download/v3.11.0/patches-3.11.0.mpp",
-  "signature_download_url": "https://github.com/totto357/piko/releases/download/v3.11.0/patches-3.11.0.mpp.asc",
-  "version": "3.11.0"
+  "created_at": "2026-10-09T18:59:14",
+  "description": "## [3.11.1](https://github.com/totto357/piko/compare/v3.11.0...v3.11.1) (2026-10-09)\n\n### 🐛 Bug Fixes\n\n* **twitter:** invoke mute filter at start of setTweet and improve root view resolution ([9e15997](https://github.com/totto357/piko/commit/9e159979e1a5177a1f34704505fa788c19224c05))",
+  "download_url": "https://github.com/totto357/piko/releases/download/v3.11.1/patches-3.11.1.mpp",
+  "signature_download_url": "https://github.com/totto357/piko/releases/download/v3.11.1/patches-3.11.1.mpp.asc",
+  "version": "3.11.1"
 }
