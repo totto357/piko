@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-09T10:43:24",
-  "description": "## [3.10.0](https://github.com/totto357/piko/compare/v3.9.0...v3.10.0) (2026-10-09)\n\n### 🐛 Bug Fixes\n\n* remove backmerge and reset version baseline to 3.9.0 ([c97d2a6](https://github.com/totto357/piko/commit/c97d2a642d7e4fa7142c77d1fa9ee20add140f9e))\n\n### ✨ New Features\n\n* **twitter:** add timeline mute filter for custom words and users ([67a4617](https://github.com/totto357/piko/commit/67a461706ec010c1b04b91bb595e1cba2a27b84e))",
-  "download_url": "https://github.com/totto357/piko/releases/download/v3.10.0/patches-3.10.0.mpp",
-  "signature_download_url": "https://github.com/totto357/piko/releases/download/v3.10.0/patches-3.10.0.mpp.asc",
-  "version": "3.10.0"
+  "created_at": "2026-10-09T11:12:15",
+  "description": "## [3.10.1](https://github.com/totto357/piko/compare/v3.10.0...v3.10.1) (2026-10-09)\n\n### 🐛 Bug Fixes\n\n* **twitter:** use invoke-static/range in timeline mute filter to prevent register overflow ([8c10456](https://github.com/totto357/piko/commit/8c1045690e7c270df5357107b1e6fc512db9a4b6))",
+  "download_url": "https://github.com/totto357/piko/releases/download/v3.10.1/patches-3.10.1.mpp",
+  "signature_download_url": "https://github.com/totto357/piko/releases/download/v3.10.1/patches-3.10.1.mpp.asc",
+  "version": "3.10.1"
 }

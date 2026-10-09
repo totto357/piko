@@ -1,3 +1,9 @@
+## [3.10.1](https://github.com/totto357/piko/compare/v3.10.0...v3.10.1) (2026-10-09)
+
+### 🐛 Bug Fixes
+
+* **twitter:** use invoke-static/range in timeline mute filter to prevent register overflow ([8c10456](https://github.com/totto357/piko/commit/8c1045690e7c270df5357107b1e6fc512db9a4b6))
+
 ## [3.10.0](https://github.com/totto357/piko/compare/v3.9.0...v3.10.0) (2026-10-09)
 
 ### 🐛 Bug Fixes
