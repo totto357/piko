@@ -198,6 +198,14 @@
     <string name="piko_pref_hide_post_inline_metrics_desc">Hides like, reposts etc counts on inline view</string>
     <string name="piko_pref_hide_post_detailed_metrics">Hide post detailed view metrics</string>
     <string name="piko_pref_hide_post_detailed_metrics_desc">Hides like, reposts etc counts on detailed view</string>
+    <string name="piko_pref_timeline_enable_mute_filter">Enable mute filter</string>
+    <string name="piko_pref_timeline_enable_mute_filter_desc">Hide posts matching muted words or users across all timelines including lists and search</string>
+    <string name="piko_pref_timeline_muted_words">Muted words</string>
+    <string name="piko_pref_timeline_muted_words_desc">Comma or newline separated list of keywords to hide</string>
+    <string name="piko_pref_timeline_muted_users">Muted users</string>
+    <string name="piko_pref_timeline_muted_users_desc">Comma or newline separated list of usernames (@ids) to hide</string>
+    <string name="piko_pref_timeline_mute_regex">Enable regular expressions</string>
+    <string name="piko_pref_timeline_mute_regex_desc">Treat muted words as regular expressions</string>
 
     <!-- Customization Settings -->
     <string name="piko_title_customisation">Customization</string>

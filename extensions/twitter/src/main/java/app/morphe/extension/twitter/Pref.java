@@ -487,5 +487,21 @@ public class Pref {
         return getList(Settings.NATIVE_SHARE_MENU_ITEMS_TO_HIDE.key);
     }
 
+    public static boolean enableTimelineMuteFilter() {
+        return Utils.getBooleanPref(Settings.TIMELINE_ENABLE_MUTE_FILTER);
+    }
+
+    public static String timelineMutedWords() {
+        return Utils.getStringPref(Settings.TIMELINE_MUTED_WORDS);
+    }
+
+    public static String timelineMutedUsers() {
+        return Utils.getStringPref(Settings.TIMELINE_MUTED_USERS);
+    }
+
+    public static boolean timelineMuteRegex() {
+        return Utils.getBooleanPref(Settings.TIMELINE_MUTE_REGEX);
+    }
+
     //end
 }
