@@ -973,6 +973,13 @@ public class ScreenBuilder {
                             Settings.TIMELINE_MUTE_REGEX
                     )
             );
+            addPreference(category,
+                    helper.switchPreference(
+                            str("piko_pref_timeline_mute_retweets"),
+                            str("piko_pref_timeline_mute_retweets_desc"),
+                            Settings.TIMELINE_MUTE_RETWEETS
+                    )
+            );
         }
         if (SettingsStatus.disableAutoTimelineScroll) {
             addPreference(category,

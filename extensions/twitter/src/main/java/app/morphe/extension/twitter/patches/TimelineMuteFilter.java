@@ -80,6 +80,151 @@ public class TimelineMuteFilter {
         }
     }
 
+    // リポスト関連のキャッシュ
+    private static volatile boolean reflectionAttempted = false;
+    private static java.lang.reflect.Field cachedDirectRetweetField = null;
+    private static java.lang.reflect.Field cachedTweetMetadataField = null;
+    private static java.lang.reflect.Field cachedSubRetweetMetadataField = null;
+    private static final List<java.lang.reflect.Field> cachedRetweeterStringFields = new ArrayList<>();
+
+    private static boolean isRetweetMetadataClass(Class<?> cls) {
+        if (cls == null || cls.isPrimitive() || cls.isArray()) return false;
+        String name = cls.getName();
+        if (name.startsWith("android.") || name.startsWith("java.") || name.startsWith("androidx.") || name.startsWith("kotlin.")) {
+            return false;
+        }
+
+        java.lang.reflect.Field[] fields = cls.getDeclaredFields();
+        if (fields.length < 3 || fields.length > 12) return false;
+
+        int longCount = 0;
+        int stringCount = 0;
+        int otherCount = 0;
+
+        for (java.lang.reflect.Field f : fields) {
+            Class<?> t = f.getType();
+            if (t == long.class || t == Long.class) {
+                longCount++;
+            } else if (t == String.class) {
+                stringCount++;
+            } else if (t.isPrimitive()) {
+                // boolean, int, etc.
+            } else {
+                otherCount++;
+            }
+        }
+
+        return (longCount >= 2 && stringCount >= 1 && otherCount <= 2);
+    }
+
+    private static void cacheStringFields(Class<?> retweetClass) {
+        cachedRetweeterStringFields.clear();
+        for (java.lang.reflect.Field f : retweetClass.getDeclaredFields()) {
+            if (f.getType() == String.class) {
+                f.setAccessible(true);
+                cachedRetweeterStringFields.add(f);
+            }
+        }
+    }
+
+    private static synchronized void resolveRetweetFields(Object tweetObj) {
+        if (reflectionAttempted) return;
+
+        try {
+            Class<?> tweetClass = tweetObj.getClass();
+
+            // 1. Direct fields of tweetObj
+            for (java.lang.reflect.Field f : tweetClass.getDeclaredFields()) {
+                f.setAccessible(true);
+                Class<?> fieldType = f.getType();
+                if (isRetweetMetadataClass(fieldType)) {
+                    cachedDirectRetweetField = f;
+                    cacheStringFields(fieldType);
+                    reflectionAttempted = true;
+                    return;
+                }
+            }
+
+            // 2. Child object fields (e.g. Tweet metadata object 'a')
+            for (java.lang.reflect.Field f1 : tweetClass.getDeclaredFields()) {
+                f1.setAccessible(true);
+                Class<?> childClass = f1.getType();
+                if (childClass == Object.class) {
+                    try {
+                        Object childObj = f1.get(tweetObj);
+                        if (childObj != null) childClass = childObj.getClass();
+                    } catch (Exception ignored) {}
+                }
+
+                String childName = childClass.getName();
+                if (!childName.startsWith("android.") && !childName.startsWith("java.") && !childName.startsWith("androidx.")) {
+                    for (java.lang.reflect.Field f2 : childClass.getDeclaredFields()) {
+                        f2.setAccessible(true);
+                        Class<?> targetClass = f2.getType();
+                        if (targetClass == Object.class) {
+                            try {
+                                Object childObj = f1.get(tweetObj);
+                                if (childObj != null) {
+                                    Object grandChild = f2.get(childObj);
+                                    if (grandChild != null) targetClass = grandChild.getClass();
+                                }
+                            } catch (Exception ignored) {}
+                        }
+
+                        if (isRetweetMetadataClass(targetClass)) {
+                            cachedTweetMetadataField = f1;
+                            cachedSubRetweetMetadataField = f2;
+                            cacheStringFields(targetClass);
+                            reflectionAttempted = true;
+                            return;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.printException(() -> "TimelineMuteFilter.resolveRetweetFields error", e);
+        }
+    }
+
+    private static List<String> getRetweeterUsernames(Object tweetObj) {
+        if (tweetObj == null) return null;
+
+        if (!reflectionAttempted) {
+            resolveRetweetFields(tweetObj);
+        }
+
+        try {
+            Object retweetMeta = null;
+            if (cachedDirectRetweetField != null) {
+                retweetMeta = cachedDirectRetweetField.get(tweetObj);
+            } else if (cachedTweetMetadataField != null && cachedSubRetweetMetadataField != null) {
+                Object meta = cachedTweetMetadataField.get(tweetObj);
+                if (meta != null) {
+                    retweetMeta = cachedSubRetweetMetadataField.get(meta);
+                }
+            }
+
+            if (retweetMeta == null) {
+                return null;
+            }
+
+            List<String> usernames = new ArrayList<>();
+            for (java.lang.reflect.Field f : cachedRetweeterStringFields) {
+                Object val = f.get(retweetMeta);
+                if (val instanceof String) {
+                    String str = (String) val;
+                    if (!str.isEmpty()) {
+                        usernames.add(str);
+                    }
+                }
+            }
+            return usernames;
+        } catch (Exception e) {
+            Logger.printException(() -> "TimelineMuteFilter.getRetweeterUsernames error", e);
+            return null;
+        }
+    }
+
     public static boolean shouldMute(Object tweetObj) {
         if (!Pref.enableTimelineMuteFilter() || !SettingsStatus.timelineMuteFilter) {
             return false;
@@ -101,11 +246,30 @@ public class TimelineMuteFilter {
             String text = tweet.getText();
 
             // 1. ユーザー名チェック (@screen_name)
-            if (username != null && !cachedUsersList.isEmpty()) {
-                String lowerUser = username.toLowerCase();
-                for (String mutedUser : cachedUsersList) {
-                    if (lowerUser.equals(mutedUser)) {
-                        return true;
+            if (!cachedUsersList.isEmpty()) {
+                if (username != null) {
+                    String lowerUser = username.toLowerCase();
+                    for (String mutedUser : cachedUsersList) {
+                        if (lowerUser.equals(mutedUser)) {
+                            return true;
+                        }
+                    }
+                }
+
+                // リポスト元（リポストしたユーザー）のチェック
+                if (Pref.timelineMuteRetweets()) {
+                    List<String> retweeterUsernames = getRetweeterUsernames(tweetObj);
+                    if (retweeterUsernames != null) {
+                        for (String retweeter : retweeterUsernames) {
+                            if (retweeter != null && !retweeter.isEmpty()) {
+                                String cleanRetweeter = retweeter.replace("@", "").toLowerCase();
+                                for (String mutedUser : cachedUsersList) {
+                                    if (cleanRetweeter.equals(mutedUser)) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -206,6 +206,8 @@
     <string name="piko_pref_timeline_muted_users_desc">Comma or newline separated list of usernames (@ids) to hide</string>
     <string name="piko_pref_timeline_mute_regex">Enable regular expressions</string>
     <string name="piko_pref_timeline_mute_regex_desc">Treat muted words as regular expressions</string>
+    <string name="piko_pref_timeline_mute_retweets">Mute reposts from muted users</string>
+    <string name="piko_pref_timeline_mute_retweets_desc">Hide reposts made by muted users on timelines</string>
 
     <!-- Customization Settings -->
     <string name="piko_title_customisation">Customization</string>

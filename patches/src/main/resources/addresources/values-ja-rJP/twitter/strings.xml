@@ -194,6 +194,8 @@
     <string name="piko_pref_timeline_muted_users_desc">カンマまたは改行区切りで非表示にしたいユーザー名（@ID）を指定します</string>
     <string name="piko_pref_timeline_mute_regex">正規表現を有効化</string>
     <string name="piko_pref_timeline_mute_regex_desc">NGワードを正規表現として扱います</string>
+    <string name="piko_pref_timeline_mute_retweets">NGユーザーのリポストもミュート</string>
+    <string name="piko_pref_timeline_mute_retweets_desc">NGユーザーがリポストした投稿もタイムライン上で非表示にします</string>
     <!-- Customization Settings -->
     <string name="piko_title_customisation">カスタマイズ</string>
     <string name="piko_pref_customisation_profiletabs">プロフィールタブから非表示にする項目</string>

@@ -97,6 +97,7 @@ public class Settings {
     public static final StringSetting TIMELINE_MUTED_WORDS = new StringSetting("timeline_muted_words", "");
     public static final StringSetting TIMELINE_MUTED_USERS = new StringSetting("timeline_muted_users", "");
     public static final BooleanSetting TIMELINE_MUTE_REGEX = new BooleanSetting("timeline_mute_regex", false);
+    public static final BooleanSetting TIMELINE_MUTE_RETWEETS = new BooleanSetting("timeline_mute_retweets", true);
 
     public static final BooleanSetting PREMIUM_UNDO_POSTS = new BooleanSetting("premium_undo_posts", false);
     public static final BooleanSetting PREMIUM_NAVBAR = new BooleanSetting("premium_custom_navbar", true);

@@ -503,5 +503,9 @@ public class Pref {
         return Utils.getBooleanPref(Settings.TIMELINE_MUTE_REGEX);
     }
 
+    public static boolean timelineMuteRetweets() {
+        return Utils.getBooleanPref(Settings.TIMELINE_MUTE_RETWEETS);
+    }
+
     //end
 }
