@@ -1,3 +1,13 @@
+## [3.10.0](https://github.com/totto357/piko/compare/v3.9.0...v3.10.0) (2026-10-09)
+
+### 🐛 Bug Fixes
+
+* remove backmerge and reset version baseline to 3.9.0 ([c97d2a6](https://github.com/totto357/piko/commit/c97d2a642d7e4fa7142c77d1fa9ee20add140f9e))
+
+### ✨ New Features
+
+* **twitter:** add timeline mute filter for custom words and users ([67a4617](https://github.com/totto357/piko/commit/67a461706ec010c1b04b91bb595e1cba2a27b84e))
+
 ## 1.0.0 (2026-10-09)
 
 ### ⚠ BREAKING CHANGES
