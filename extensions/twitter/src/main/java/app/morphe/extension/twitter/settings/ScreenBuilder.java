@@ -944,6 +944,36 @@ public class ScreenBuilder {
         LegacyTwitterPreferenceCategory category = null;
         if(buildCategory)
             category = preferenceCategory(str("piko_title_timeline"));
+        if (SettingsStatus.timelineMuteFilter) {
+            addPreference(category,
+                    helper.switchPreference(
+                            str("piko_pref_timeline_enable_mute_filter"),
+                            str("piko_pref_timeline_enable_mute_filter_desc"),
+                            Settings.TIMELINE_ENABLE_MUTE_FILTER
+                    )
+            );
+            addPreference(category,
+                    helper.editTextPreference(
+                            str("piko_pref_timeline_muted_words"),
+                            str("piko_pref_timeline_muted_words_desc"),
+                            Settings.TIMELINE_MUTED_WORDS
+                    )
+            );
+            addPreference(category,
+                    helper.editTextPreference(
+                            str("piko_pref_timeline_muted_users"),
+                            str("piko_pref_timeline_muted_users_desc"),
+                            Settings.TIMELINE_MUTED_USERS
+                    )
+            );
+            addPreference(category,
+                    helper.switchPreference(
+                            str("piko_pref_timeline_mute_regex"),
+                            str("piko_pref_timeline_mute_regex_desc"),
+                            Settings.TIMELINE_MUTE_REGEX
+                    )
+            );
+        }
         if (SettingsStatus.disableAutoTimelineScroll) {
             addPreference(category,
                     helper.switchPreference(

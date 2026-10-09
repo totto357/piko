@@ -186,6 +186,14 @@
     <string name="piko_pref_hide_post_inline_metrics_desc">インラインビューで「いいね」や「リポスト」などのカウントを非表示にします</string>
     <string name="piko_pref_hide_post_detailed_metrics">ポストの詳細な閲覧指標を非表示</string>
     <string name="piko_pref_hide_post_detailed_metrics_desc">詳細表示での「いいね」や「リポスト」などのカウントを非表示にします</string>
+    <string name="piko_pref_timeline_enable_mute_filter">ミュートフィルターを有効化</string>
+    <string name="piko_pref_timeline_enable_mute_filter_desc">リストや検索を含むすべてのタイムラインでNGワード・NGユーザーに一致するポストを非表示にします</string>
+    <string name="piko_pref_timeline_muted_words">NGワード</string>
+    <string name="piko_pref_timeline_muted_words_desc">カンマまたは改行区切りで非表示にしたいキーワードを指定します</string>
+    <string name="piko_pref_timeline_muted_users">NGユーザー</string>
+    <string name="piko_pref_timeline_muted_users_desc">カンマまたは改行区切りで非表示にしたいユーザー名（@ID）を指定します</string>
+    <string name="piko_pref_timeline_mute_regex">正規表現を有効化</string>
+    <string name="piko_pref_timeline_mute_regex_desc">NGワードを正規表現として扱います</string>
     <!-- Customization Settings -->
     <string name="piko_title_customisation">カスタマイズ</string>
     <string name="piko_pref_customisation_profiletabs">プロフィールタブから非表示にする項目</string>
