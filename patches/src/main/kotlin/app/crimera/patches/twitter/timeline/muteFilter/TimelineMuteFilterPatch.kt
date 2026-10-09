@@ -13,11 +13,11 @@ import app.crimera.patches.twitter.utils.Constants.PATCHES_DESCRIPTOR
 import app.crimera.patches.twitter.utils.enableSettings
 import app.crimera.patches.twitter.utils.versionCheckPatch
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.instructions
+import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.fieldAccess
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.string
+import app.morphe.util.indexOfFirstInstructionReversedOrThrow
 import com.android.tools.smali.dexlib2.Opcode
 
 private const val INLINE_ACTION_BAR_DESCRIPTOR = "Lcom/twitter/ui/tweet/inlineactions/InlineActionBar;"
@@ -45,15 +45,11 @@ val timelineMuteFilterPatch =
 
         execute {
             val method = SetTweetFingerprint.method
-            val instructions = method.instructions
+            val returnVoidIndex = method.indexOfFirstInstructionReversedOrThrow(Opcode.RETURN_VOID)
 
-            val returnVoidIndex = instructions.last { it.opcode == Opcode.RETURN_VOID }.location.index
-
-            method.addInstructions(
+            method.addInstruction(
                 returnVoidIndex,
-                """
-                invoke-static { p0, p1 }, $PATCHES_DESCRIPTOR/TimelineMuteFilter;->filterTweet(Landroid/view/View;Ljava/lang/Object;)V
-                """.trimIndent()
+                "invoke-static/range { p0 .. p1 }, $PATCHES_DESCRIPTOR/TimelineMuteFilter;->filterTweet(Landroid/view/View;Ljava/lang/Object;)V",
             )
 
             enableSettings("timelineMuteFilter")
