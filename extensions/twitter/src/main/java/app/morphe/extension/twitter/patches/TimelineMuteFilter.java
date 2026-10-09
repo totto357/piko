@@ -218,6 +218,20 @@ public class TimelineMuteFilter {
                     }
                 }
             }
+
+            // Fallback: check method D() which returns retweeter username if retweet
+            try {
+                java.lang.reflect.Method mD = tweetObj.getClass().getDeclaredMethod("D");
+                mD.setAccessible(true);
+                Object resD = mD.invoke(tweetObj);
+                if (resD instanceof String && !((String) resD).isEmpty()) {
+                    String dStr = (String) resD;
+                    if (!usernames.contains(dStr)) {
+                        usernames.add(dStr);
+                    }
+                }
+            } catch (Exception ignored) {}
+
             return usernames;
         } catch (Exception e) {
             Logger.printException(() -> "TimelineMuteFilter.getRetweeterUsernames error", e);
@@ -241,16 +255,45 @@ public class TimelineMuteFilter {
             }
 
             Tweet tweet = new Tweet(tweetObj);
-            String username = tweet.getTweetUsername();
-            String profileName = tweet.getTweetProfileName();
-            String text = tweet.getText();
+            String username = null;
+            try {
+                username = tweet.getTweetUsername();
+            } catch (Exception ignored) {}
+
+            if (username == null || username.isEmpty()) {
+                try {
+                    java.lang.reflect.Method m = tweetObj.getClass().getDeclaredMethod("w");
+                    m.setAccessible(true);
+                    Object res = m.invoke(tweetObj);
+                    if (res instanceof String) username = (String) res;
+                } catch (Exception ignored) {}
+            }
+            if (username == null || username.isEmpty()) {
+                try {
+                    java.lang.reflect.Method m = tweetObj.getClass().getDeclaredMethod("D");
+                    m.setAccessible(true);
+                    Object res = m.invoke(tweetObj);
+                    if (res instanceof String) username = (String) res;
+                } catch (Exception ignored) {}
+            }
+
+            String profileName = null;
+            try {
+                profileName = tweet.getTweetProfileName();
+            } catch (Exception ignored) {}
+
+            String text = null;
+            try {
+                text = tweet.getText();
+            } catch (Exception ignored) {}
 
             // 1. ユーザー名チェック (@screen_name)
             if (!cachedUsersList.isEmpty()) {
-                if (username != null) {
+                if (username != null && !username.isEmpty()) {
                     String lowerUser = username.toLowerCase();
                     for (String mutedUser : cachedUsersList) {
                         if (lowerUser.equals(mutedUser)) {
+                            android.util.Log.d("PikoMute", "Muted by author username: " + lowerUser);
                             return true;
                         }
                     }
@@ -265,6 +308,7 @@ public class TimelineMuteFilter {
                                 String cleanRetweeter = retweeter.replace("@", "").toLowerCase();
                                 for (String mutedUser : cachedUsersList) {
                                     if (cleanRetweeter.equals(mutedUser)) {
+                                        android.util.Log.d("PikoMute", "Muted by retweeter: " + cleanRetweeter);
                                         return true;
                                     }
                                 }
@@ -281,6 +325,7 @@ public class TimelineMuteFilter {
                 for (String word : cachedWordsList) {
                     if ((!lowerText.isEmpty() && lowerText.contains(word)) ||
                         (!lowerProfile.isEmpty() && lowerProfile.contains(word))) {
+                        android.util.Log.d("PikoMute", "Muted by keyword: " + word);
                         return true;
                     }
                 }
@@ -293,6 +338,7 @@ public class TimelineMuteFilter {
                 for (Pattern pattern : cachedWordsPatterns) {
                     if ((!targetText.isEmpty() && pattern.matcher(targetText).find()) ||
                         (!targetProfile.isEmpty() && pattern.matcher(targetProfile).find())) {
+                        android.util.Log.d("PikoMute", "Muted by regex: " + pattern.pattern());
                         return true;
                     }
                 }
@@ -316,19 +362,9 @@ public class TimelineMuteFilter {
             if (parentClassName.contains("RecyclerView") || parentClassName.contains("ListView")) {
                 return current;
             }
-            if (parentClassName.contains("TweetView")) {
-                ViewParent grandParent = parent.getParent();
-                if (grandParent instanceof ViewGroup) {
-                    String grandParentName = grandParent.getClass().getName();
-                    if (grandParentName.contains("RecyclerView") || grandParentName.contains("ListView")) {
-                        return parent;
-                    }
-                }
-                return parent;
-            }
             current = parent;
         }
-        return inlineActionBar;
+        return current;
     }
 
     public static void filterTweet(View inlineActionBar, Object tweetObj) {
@@ -342,11 +378,13 @@ public class TimelineMuteFilter {
             ViewGroup.LayoutParams lp = tweetRoot.getLayoutParams();
             if (mute) {
                 tweetRoot.setVisibility(View.GONE);
+                inlineActionBar.setVisibility(View.GONE);
                 if (lp != null && lp.height != 0) {
                     lp.height = 0;
                     if (lp instanceof ViewGroup.MarginLayoutParams) {
-                        ((ViewGroup.MarginLayoutParams) lp).topMargin = 0;
-                        ((ViewGroup.MarginLayoutParams) lp).bottomMargin = 0;
+                        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) lp;
+                        mlp.topMargin = 0;
+                        mlp.bottomMargin = 0;
                     }
                     tweetRoot.setLayoutParams(lp);
                 }
@@ -357,6 +395,9 @@ public class TimelineMuteFilter {
                         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                         tweetRoot.setLayoutParams(lp);
                     }
+                }
+                if (inlineActionBar.getVisibility() == View.GONE) {
+                    inlineActionBar.setVisibility(View.VISIBLE);
                 }
             }
         } catch (Exception e) {

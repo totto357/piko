@@ -45,10 +45,11 @@ val timelineMuteFilterPatch =
 
         execute {
             val method = SetTweetFingerprint.method
-            val returnVoidIndex = method.indexOfFirstInstructionReversedOrThrow(Opcode.RETURN_VOID)
+            val iputInstruction = SetTweetFingerprint.instructionMatches.first()
+            val targetIndex = iputInstruction.index + 1
 
             method.addInstruction(
-                returnVoidIndex,
+                targetIndex,
                 "invoke-static/range { p0 .. p1 }, $PATCHES_DESCRIPTOR/TimelineMuteFilter;->filterTweet(Landroid/view/View;Ljava/lang/Object;)V",
             )
 
