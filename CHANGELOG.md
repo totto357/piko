@@ -1,3 +1,9 @@
+## [3.11.0](https://github.com/totto357/piko/compare/v3.10.1...v3.11.0) (2026-10-09)
+
+### ✨ New Features
+
+* **twitter:** add option to mute reposts from muted users ([9c43dc7](https://github.com/totto357/piko/commit/9c43dc7e3a21be2e56300a2243cb82fffe020108))
+
 ## [3.10.1](https://github.com/totto357/piko/compare/v3.10.0...v3.10.1) (2026-10-09)
 
 ### 🐛 Bug Fixes
