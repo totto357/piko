@@ -135,3 +135,5 @@ bin/
 /local.properties
 
 .direnv
+
+.envrc.local
